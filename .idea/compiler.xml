@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
       <module name="StudyAndroid_0.chapter_1.testconfigchanges" target="11" />
+      <module name="StudyAndroid_0.chapter_1.testlaunchmode" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
