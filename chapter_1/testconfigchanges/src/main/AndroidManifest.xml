@@ -10,13 +10,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyAndroid_0">
         <activity
-            android:configChanges="orientation|screenSize|uiMode"
+            android:name=".SecondActivity"
+            android:allowTaskReparenting="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.hcs.testconfigchanges.SecondActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|screenSize|uiMode"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.hcs.testconfigchanges.MainActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

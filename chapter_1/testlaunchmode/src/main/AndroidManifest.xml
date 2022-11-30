@@ -9,6 +9,8 @@
         <intent>
             <action android:name="com.hcs.testlunchmode.ThirdActivity" />
         </intent>
+
+        <package android:name="com.hcs.testconfigchanges" />
     </queries>
 
     <application
@@ -24,7 +26,7 @@
             android:icon="@drawable/fries"
             android:label="FourthActivity"
             android:launchMode="singleTask"
-            android:taskAffinity="com.hcs.testlaunchmode.haospring">
+            android:taskAffinity="com.hcs.testlaunchmode.task">
             <intent-filter>
                 <action android:name="com.hcs.testlaunchmode.FourthActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -36,7 +38,7 @@
             android:icon="@drawable/cream"
             android:label="ThirdActivity"
             android:launchMode="singleTask"
-            android:taskAffinity="com.hcs.testlaunchmode.haospring">
+            android:taskAffinity="com.hcs.testlaunchmode.task">
             <intent-filter>
                 <action android:name="com.hcs.testlaunchmode.ThirdActivity" />
 

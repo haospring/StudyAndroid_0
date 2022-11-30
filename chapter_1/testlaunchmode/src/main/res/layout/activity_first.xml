@@ -27,4 +27,15 @@
         app:layout_constraintStart_toStartOf="@id/text_first"
         app:layout_constraintTop_toBottomOf="@id/text_first" />
 
+    <Button
+        android:id="@+id/btn_first_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Click to another app"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@id/btn_first"
+        app:layout_constraintStart_toStartOf="@id/btn_first"
+        app:layout_constraintTop_toBottomOf="@id/btn_first" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
