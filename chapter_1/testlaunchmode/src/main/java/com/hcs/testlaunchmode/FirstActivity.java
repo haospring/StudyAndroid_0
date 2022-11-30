@@ -25,6 +25,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
 
         mBinding.btnFirst.setOnClickListener(this);
         mBinding.btnFirst2.setOnClickListener(this);
+        mBinding.btnFirst3.setOnClickListener(this);
     }
 
 
@@ -44,6 +45,9 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 Log.d("haospring3", "onClick: ");
                 startActivity(intent);
             }
+        } else if (viewId == mBinding.btnFirst3.getId()) {
+            intent = new Intent(this, SingleInstanceActivity.class);
+            startActivity(intent);
         }
     }
 }
