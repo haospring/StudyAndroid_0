@@ -21,6 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyAndroid_0">
         <activity
+            android:name=".SingleInstanceActivity"
+            android:exported="false"
+            android:label="SingleInstanceActivity"
+            android:launchMode="singleInstance" />
+        <activity
             android:name=".FourthActivity"
             android:exported="false"
             android:icon="@drawable/fries"
@@ -29,6 +34,7 @@
             android:taskAffinity="com.hcs.testlaunchmode.task">
             <intent-filter>
                 <action android:name="com.hcs.testlaunchmode.FourthActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
