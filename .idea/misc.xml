@@ -12,11 +12,15 @@
         <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_1/testlunchmode/src/main/res/layout/activity_first.xml" value="0.4" />
         <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_1/testlunchmode/src/main/res/layout/activity_second.xml" value="0.36041666666666666" />
         <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_1/testlunchmode/src/main/res/layout/activity_third.xml" value="0.36041666666666666" />
+        <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_2/testmessenger/src/main/res/layout/activity_main.xml" value="0.36041666666666666" />
+        <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_2/testprocess/src/main/res/layout/activity_main.xml" value="0.36041666666666666" />
+        <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_2/testprocess/src/main/res/layout/activity_second.xml" value="0.3421875" />
+        <entry key="..\:/Documents/MyGit/Github/StudyAndroid_0/chapter_2/testprocess/src/main/res/layout/activity_third.xml" value="0.36041666666666666" />
         <entry key="..\:/Documents/MyGit/StudyAndroid_0/chapter_1/testconfigchanges/src/main/res/layout/activity_main.xml" value="0.16770833333333332" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
