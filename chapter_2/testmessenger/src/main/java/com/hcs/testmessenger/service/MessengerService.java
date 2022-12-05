@@ -67,7 +67,6 @@ public class MessengerService extends Service {
                 data.setClassLoader(User.class.getClassLoader());
                 Log.d(TAG, "handleMessage: " + data.getString(Constant.MSG_TITLE_CLIENT));
                 Log.d(TAG, "handleMessage: " + data.getParcelable(Constant.MSG_TITLE_USER));
-
                 Messenger clientMessenger = msg.replyTo;
                 Bundle serviceData = new Bundle();
                 serviceData.putString(Constant.MSG_TITLE_SERVICE, Constant.MSG_CONTENT_SERVICE);
