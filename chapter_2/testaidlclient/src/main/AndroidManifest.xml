@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hcs.testaidl">
 
-    <permission
-        android:name="com.hcs.testaidl.permission.ACCESS_BOOK_SERVICE"
-        android:protectionLevel="normal" />
-
     <uses-permission android:name="com.hcs.testaidl.permission.ACCESS_BOOK_SERVICE" />
+
+    <queries>
+        <package android:name="com.hcs.testaidl" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -15,16 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StudyAndroid_0">
-        <service
-            android:name=".BookService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.hcs.testaidlservice.BookService" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,11 +22,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="com.hcs.testaidlservice.MainActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
