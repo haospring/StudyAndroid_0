@@ -11,11 +11,12 @@ import android.util.Log;
 
 import com.hcs.testprovider.repository.DbOpenHelper;
 
+import java.net.URI;
+import java.util.Arrays;
+
 public class BookProvider extends ContentProvider {
     private static final String TAG = "haospring BookProvider";
     public static final String AUTHORITY = "com.hcs.testprovider.book.provider";
-    public static final Uri BOOK_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/book");
-    public static final Uri USER_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/user");
     private static final int CODE_BOOK_DIR = 0;
     private static final int CODE_USER_DIR = 1;
     private static final int CODE_BOOK_ITEM = 2;
@@ -38,7 +39,7 @@ public class BookProvider extends ContentProvider {
     public boolean onCreate() {
         Log.d(TAG, "onCreate: " + Thread.currentThread().getName());
         mContext = getContext();
-        DbOpenHelper dbOpenHelper = new DbOpenHelper(mContext);
+        DbOpenHelper dbOpenHelper = new DbOpenHelper(mContext, "book_provider.db", null, 3);
         mDb = dbOpenHelper.getWritableDatabase();
         return true;
     }
@@ -51,7 +52,7 @@ public class BookProvider extends ContentProvider {
         if (table == null) {
             throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
-        if (uri.getPathSegments().size() >= 1) {
+        if (uri.getPathSegments().size() > 1) {
             selectionArgs = new String[]{uri.getPathSegments().get(1)};
             selection = "id = ?";
         }
@@ -65,8 +66,7 @@ public class BookProvider extends ContentProvider {
             throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
         long id = mDb.insert(table, null, values);
-        Uri newUri = Uri.parse("content://" + AUTHORITY + table + "/" + id);
-        mContext.getContentResolver().notifyChange(newUri, null);
+        Uri newUri = Uri.parse("content://" + AUTHORITY + "/" + table + "/" + id);
         return newUri;
     }
 
@@ -83,6 +83,9 @@ public class BookProvider extends ContentProvider {
             selection = "id = ?";
             selectionArgs = new String[]{uri.getPathSegments().get(1)};
         }
+        Log.d(TAG, "uri: " + uri);
+        Log.d(TAG, "update selection: " + selection);
+        Log.d(TAG, "update selectionArgs: " + Arrays.toString(selectionArgs));
         return mDb.update(table, values, selection, selectionArgs);
     }
 
@@ -96,6 +99,8 @@ public class BookProvider extends ContentProvider {
             selection = "id = ?";
             selectionArgs = new String[]{uri.getPathSegments().get(1)};
         }
+        Log.d(TAG, "delete selection: " + selection);
+        Log.d(TAG, "delete selectionArgs: " + Arrays.toString(selectionArgs));
         return mDb.delete(table, selection, selectionArgs);
     }
 
@@ -137,6 +142,8 @@ public class BookProvider extends ContentProvider {
     }
 
     public static class Book {
+        public static final Uri BOOK_URI = Uri.parse("content://" + AUTHORITY + "/book");
+        public static final String BOOK_ID = "id";
         public static final String BOOK_ISBN = "book_isbn";
         public static final String BOOK_NAME = "book_name";
         public static final String BOOK_PRICE = "book_price";
@@ -144,6 +151,8 @@ public class BookProvider extends ContentProvider {
     }
 
     public static class User {
+        public static final Uri USER_URI = Uri.parse("content://" + AUTHORITY + "/user");
+        public static final String USER_ID = "id";
         public static final String USER_NAME = "user_name";
         public static final String USER_GENDER = "user_gender";
         public static final String USER_DESCRIPTION = "user_description";
