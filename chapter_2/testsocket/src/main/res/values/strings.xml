@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Test Socket</string>
+    <string name="log_output_info_is_null">该 log 输出信息为空</string>
+</resources>
