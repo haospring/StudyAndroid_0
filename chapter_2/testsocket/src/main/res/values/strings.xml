@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Test Socket</string>
     <string name="log_output_info_is_null">该 log 输出信息为空</string>
+    <string name="text_server">Socket服务端</string>
+    <string name="text_client">Socket客户端</string>
+    <string name="text_send_to_client">发送给客户端</string>
+    <string name="text_info">信息</string>
+    <string name="ip_address">IP 地址：</string>
+    <string name="connect_ip_address">连接 IP 地址：</string>
+    <string name="btn_open_server">开启服务</string>
+    <string name="btn_close_server">关闭服务</string>
+    <string name="btn_connect_server">连接服务</string>
+    <string name="btn_connect_client">断开连接</string>
+    <string name="btn_send">发送</string>
 </resources>
