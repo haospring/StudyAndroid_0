@@ -10,6 +10,7 @@
     <string name="btn_open_server">开启服务</string>
     <string name="btn_close_server">关闭服务</string>
     <string name="btn_connect_server">连接服务</string>
-    <string name="btn_connect_client">断开连接</string>
+    <string name="btn_connect_client">开始连接</string>
+    <string name="btn_close_client">断开连接</string>
     <string name="btn_send">发送</string>
 </resources>
