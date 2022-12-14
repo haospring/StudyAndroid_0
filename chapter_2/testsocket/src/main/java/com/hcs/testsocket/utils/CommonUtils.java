@@ -19,4 +19,22 @@ public class CommonUtils {
         result.append("]");
         return result.toString();
     }
+
+    public static String intToIp(int ip) {
+        return (ip & 0xFF) + "."
+                + ((ip >> 8) & 0xFF) + "."
+                + ((ip >> 16) & 0xFF) + "."
+                + ((ip >> 24) & 0xFF);
+    }
+
+    public static long ipToInt(String ipAddress) {
+        String[] ipAddressArray = ipAddress.split("\\.");
+        long result = 0;
+        for (int i = 0; i < Constants.IP_ARRAYS_LENGTH; i++) {
+            long ip = Long.parseLong(ipAddressArray[i]);
+            result |= (ip << i * 8);
+        }
+
+        return result;
+    }
 }

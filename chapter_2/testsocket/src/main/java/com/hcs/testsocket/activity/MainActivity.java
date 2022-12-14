@@ -2,6 +2,10 @@ package com.hcs.testsocket.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,9 +17,11 @@ import com.hcs.testsocket.socket.ServerCallback;
 import com.hcs.testsocket.socket.client.TcpClient;
 import com.hcs.testsocket.socket.server.TcpServer;
 import com.hcs.testsocket.utils.CommonUtils;
+import com.hcs.testsocket.utils.Constants;
 import com.hcs.testsocket.utils.LogUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -65,23 +71,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mBinding.layClient.setVisibility(View.GONE);
             }
         });
+
+        mBinding.etIpAddress.setText(getIpAddress());
     }
 
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == mBinding.btnStartService.getId()) {
-            mTcpServer.startServer(40000, this);
+            mTcpServer.startServer(Constants.SOCKET_PORT, this);
         } else if (viewId == mBinding.btnConnectService.getId()) {
-            // 10.0.2.16
             mTcpClient.setOnSocketStateListener(this);
             mTcpClient.setOnMessageArrivedListener(this);
-            mTcpClient.start(Objects.requireNonNull(mBinding.etIpAddress.getText()).toString(), 40000);
+            mTcpClient.start(Objects.requireNonNull(mBinding.etIpAddress.getText()).toString(), Constants.SOCKET_PORT);
         } else if (viewId == mBinding.btnSendMsg.getId()) {
-            mExecutorService.execute(()->{
+            mExecutorService.execute(() -> {
                 mTcpClient.sendToServer(Objects.requireNonNull(mBinding.etMsg.getText()).toString());
+                mBinding.etMsg.setText("");
             });
         }
+    }
+
+    private String getIpAddress() {
+        String ipStr = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            LinkProperties linkProperties = connManager.getLinkProperties(connManager.getActiveNetwork());
+            List<LinkAddress> linkAddresses = linkProperties.getLinkAddresses();
+            String hostAddress;
+            for (LinkAddress linkAddress : linkAddresses) {
+                hostAddress = linkAddress.getAddress().getHostAddress();
+                if (hostAddress != null && hostAddress.split("\\.").length == Constants.IP_ARRAYS_LENGTH) {
+                    ipStr = hostAddress;
+                    break;
+                }
+            }
+        } else {
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
+            ipStr = CommonUtils.intToIp(ipAddress);
+        }
+        return ipStr;
     }
 
     @Override
