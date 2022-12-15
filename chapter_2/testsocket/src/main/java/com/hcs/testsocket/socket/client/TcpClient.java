@@ -150,12 +150,15 @@ public class TcpClient {
         }
         mConnection = true;
 
+        if (mInputStream.available() == 0) {
+            return;
+        }
         BufferedReader br = new BufferedReader(new InputStreamReader(mInputStream));
         String line;
-        while (isStarted() && isConnected()) {
+        while (isStarted()) {
             line = br.readLine();
             LogUtils.logD(TAG, "message from server is: %s", line);
-            if (mOnMessageArrivedListener != null) {
+            if (mOnMessageArrivedListener != null && line != null) {
                 mOnMessageArrivedListener.onMessageArrived(line.getBytes());
             }
         }
@@ -190,12 +193,12 @@ public class TcpClient {
             mWorkThread.quitSafely();
         }
 
-        if (mHeartThread != null) {
-            mHeartThread.quitSafely();
-        }
-
         if (mWorkHandler != null) {
             mWorkHandler.removeCallbacksAndMessages(null);
+        }
+
+        if (mHeartThread != null) {
+            mHeartThread.quitSafely();
         }
 
         if (mHeartHandler != null) {
@@ -209,8 +212,15 @@ public class TcpClient {
             if (mOutputStream != null) {
                 mOutputStream.close();
             }
+            if (mSocket != null && !mSocket.isClosed()) {
+                mSocket.shutdownInput();
+                mSocket.shutdownOutput();
+                mSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            mConnection = false;
         }
 
         if (mOnSocketStateListener != null) {

@@ -13,4 +13,6 @@
     <string name="btn_connect_client">开始连接</string>
     <string name="btn_close_client">断开连接</string>
     <string name="btn_send">发送</string>
+    <string name="msg_send_to_client">发送给客户端</string>
+    <string name="msg_send_to_server">发送给服务端</string>
 </resources>

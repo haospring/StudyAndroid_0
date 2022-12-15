@@ -1,13 +1,19 @@
 package com.hcs.testsocket.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import android.net.ConnectivityManager;
 import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.hcs.testsocket.R;
 import com.hcs.testsocket.databinding.ActivityMainBinding;
@@ -19,7 +25,9 @@ import com.hcs.testsocket.socket.server.TcpServer;
 import com.hcs.testsocket.utils.CommonUtils;
 import com.hcs.testsocket.utils.Constants;
 import com.hcs.testsocket.utils.LogUtils;
+import com.hcs.testsocket.viewmodel.MainActivityModel;
 
+import java.time.chrono.ThaiBuddhistEra;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +42,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TcpServer mTcpServer;
     private TcpClient mTcpClient;
 
+    private boolean mIsServerStarted;
+
     private final ExecutorService mExecutorService = Executors.newCachedThreadPool();
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(mBinding.getRoot());
 
         initData();
+        initObserver();
         initView();
 
         mBinding.btnStartService.setOnClickListener(this);
@@ -55,21 +67,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTcpClient = new TcpClient();
     }
 
-    private void initView() {
-        mBinding.rbServer.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
+    private void initObserver() {
+        MainActivityModel.getInstance().getIsServer().observe(this, aBoolean -> {
+            if (aBoolean) {
                 mBinding.layServer.setVisibility(View.VISIBLE);
+                mBinding.layClient.setVisibility(View.GONE);
             } else {
+                mBinding.layClient.setVisibility(View.VISIBLE);
                 mBinding.layServer.setVisibility(View.GONE);
             }
+            mBinding.etMsg.setHint(aBoolean ? getResources().getString(R.string.msg_send_to_client)
+                    : getResources().getString(R.string.msg_send_to_server));
         });
+    }
 
-        mBinding.rbClient.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                mBinding.layClient.setVisibility(View.VISIBLE);
-            } else {
-                mBinding.layClient.setVisibility(View.GONE);
-            }
+    private void initView() {
+        mBinding.rbServer.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            MainActivityModel.getInstance().getIsServer().postValue(isChecked);
         });
 
         mBinding.etIpAddress.setText(getIpAddress());
@@ -79,7 +93,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int viewId = v.getId();
         if (viewId == mBinding.btnStartService.getId()) {
-            mTcpServer.startServer(Constants.SOCKET_PORT, this);
+            if (mIsServerStarted) {
+                if (mTcpServer != null) {
+                    mTcpServer.close();
+                    mIsServerStarted = false;
+                }
+                mBinding.btnStartService.setText(getResources().getString(R.string.btn_open_server));
+            } else {
+                mIsServerStarted = mTcpServer.startServer(Constants.SOCKET_PORT, this);
+                mBinding.btnStartService.setText(getResources().getString(R.string.btn_close_server));
+            }
         } else if (viewId == mBinding.btnConnectService.getId()) {
             mTcpClient.setOnSocketStateListener(this);
             mTcpClient.setOnMessageArrivedListener(this);

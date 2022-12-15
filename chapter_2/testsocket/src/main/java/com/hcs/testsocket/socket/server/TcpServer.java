@@ -24,15 +24,16 @@ public class TcpServer {
     private static final int TCP_MAX_CONNECT_COUNT = 10;
     private static final int READ_BLOCK_SIZE = 1024 * 1024;
 
-    private ServerSocket serverSocket;
+    private ServerSocket mServerSocket;
     private List<Socket> mClientList;
     private ServerCallback mServerCallback;
-    private ExecutorService executorService;
+    private ExecutorService mExecutorService;
     private Socket mSocket;
 
     private boolean mResult = true;
 
     private TcpServer() {
+        mExecutorService = Executors.newSingleThreadExecutor();
     }
 
     private static class TcpServerHolder {
@@ -85,19 +86,18 @@ public class TcpServer {
     public boolean startServer(int port, ServerCallback callback) {
         mServerCallback = callback;
         mClientList = new ArrayList<>();
-        executorService = Executors.newFixedThreadPool(TCP_MAX_CONNECT_COUNT);
 
-        executorService.execute(() -> {
+        mExecutorService.execute(() -> {
             try {
-                serverSocket = new ServerSocket(port);
+                mServerSocket = new ServerSocket(port);
                 while (mResult) {
-                    mSocket = serverSocket.accept();
+                    mSocket = mServerSocket.accept();
                     mClientList.add(mSocket);
                     if (mServerCallback != null) {
                         String host = mSocket.getInetAddress().getHostAddress();
                         mServerCallback.otherMsg(host, host + " connected success");
                     }
-                    executorService.execute(new ReadRunnable(mSocket));
+                    mExecutorService.execute(new ReadRunnable(mSocket));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -130,8 +130,8 @@ public class TcpServer {
                 }
             }
 
-            if (serverSocket != null) {
-                serverSocket.close();
+            if (mServerSocket != null) {
+                mServerSocket.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class TcpServer {
     }
 
     private void closeClient(Socket socket) throws IOException {
-        if (socket != null) {
+        if (socket != null && !socket.isClosed()) {
             socket.shutdownInput();
             socket.shutdownOutput();
             socket.close();
