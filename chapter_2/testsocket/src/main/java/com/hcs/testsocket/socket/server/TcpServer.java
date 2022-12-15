@@ -33,7 +33,7 @@ public class TcpServer {
     private boolean mResult = true;
 
     private TcpServer() {
-        mExecutorService = Executors.newSingleThreadExecutor();
+        mExecutorService = Executors.newCachedThreadPool();
     }
 
     private static class TcpServerHolder {
@@ -54,6 +54,7 @@ public class TcpServer {
 
         @Override
         public void run() {
+            LogUtils.logD(TAG, "===============");
             try (InputStream inputStream = socket.getInputStream()) {
                 try (OutputStream outputStream = socket.getOutputStream()) {
                     byte[] buffer = new byte[READ_BLOCK_SIZE];
@@ -91,8 +92,10 @@ public class TcpServer {
             try {
                 mServerSocket = new ServerSocket(port);
                 while (mResult) {
+                    LogUtils.logD(TAG, "+++++++++++++++");
                     mSocket = mServerSocket.accept();
                     mClientList.add(mSocket);
+                    LogUtils.logD(TAG, "---------------: " + mServerCallback);
                     if (mServerCallback != null) {
                         String host = mSocket.getInetAddress().getHostAddress();
                         mServerCallback.otherMsg(host, host + " connected success");
