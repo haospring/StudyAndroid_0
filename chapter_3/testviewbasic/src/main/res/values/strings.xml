@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Test View Basic</string>
+    <string name="warn_log_empty">该条 log 输出为空</string>
+</resources>
