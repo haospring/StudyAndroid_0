@@ -2,7 +2,9 @@ package com.hcs.testviewbasic.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
@@ -24,6 +26,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LogUtils.logD(TAG, "density = %f", getResources().getDisplayMetrics().density);
 
         mBinding.tvv1.setOnClickListener(this);
+        // 事件拦截体系中，setOnTouchListener的优先级最高，onTouch返回false，View的onTouchEvent才会被调用，
+        // 返回true，则onTouchEvent不会被调用
+        mBinding.tvv1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+
+        try {
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            LogUtils.logD(TAG, "versionName = %s", versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        mBinding.tb4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.logD(TAG, "test button onclick");
+            }
+        });
     }
 
     @Override

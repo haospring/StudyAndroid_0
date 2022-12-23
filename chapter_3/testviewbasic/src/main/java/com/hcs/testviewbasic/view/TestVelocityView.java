@@ -20,6 +20,8 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
     private final Scroller mScroller;
     private int mScrollX;
     private int mScrollY;
+    private int mLastX;
+    private int mLastY;
 
     public TestVelocityView(Context context) {
         this(context, null);
@@ -59,6 +61,23 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
         velocityTracker.clear();
         velocityTracker.recycle();
 
+        int x = (int) event.getRawX();
+        int y = (int) event.getRawY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+                setTranslationX(getTranslationX() + deltaX);
+                setTranslationY(getTranslationY() + deltaY);
+                break;
+            default:
+        }
+
+        mLastX = x;
+        mLastY = y;
+
         return mGestureDetector.onTouchEvent(event);
     }
 
@@ -73,8 +92,6 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
         int deltaX = destX - startX;
         int deltaY = destY - startY;
         mScroller.startScroll(startX, startY, deltaX, deltaY, 1000);
-        scrollTo(destX, destY);
-        scrollBy(destX, destY);
         invalidate();
     }
 
