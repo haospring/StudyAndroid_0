@@ -6,13 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.hcs.testviewbasic.view.TestVelocityView
+        android:id="@+id/tvv_1"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@color/red"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="Click Anywhere"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hcs.testviewbasic.view.TestScrollView
+        android:id="@+id/tsv_2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/design_default_color_primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="Click Anywhere"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvv_1" />
+
+    <com.hcs.testviewbasic.view.TestGlideView
+        android:id="@+id/tgv_3"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:src="@drawable/heart_fill"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tsv_2" />
+
+    <com.hcs.testviewbasic.view.TestButton
+        android:id="@+id/tb_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:enabled="false"
+        android:text="click me"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@id/tgv_3"
+        app:layout_constraintStart_toStartOf="@id/tgv_3"
+        app:layout_constraintTop_toBottomOf="@id/tgv_3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
