@@ -33,7 +33,6 @@ public class TestScrollView extends TextView {
     public TestScrollView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.test_translate);
-        mAnimation.setFillAfter(true);
 
         mObjectAnimator = ObjectAnimator.ofFloat(this, "translationX", 0, 100);
         mObjectAnimator.setDuration(1000);

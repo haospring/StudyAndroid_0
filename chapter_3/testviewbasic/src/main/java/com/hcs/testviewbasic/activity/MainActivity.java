@@ -3,8 +3,11 @@ package com.hcs.testviewbasic.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewConfiguration;
 
@@ -48,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LogUtils.logD(TAG, "test button onclick");
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
