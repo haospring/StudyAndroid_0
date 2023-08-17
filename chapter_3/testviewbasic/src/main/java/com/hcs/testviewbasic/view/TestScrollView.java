@@ -42,6 +42,7 @@ public class TestScrollView extends TextView {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP && mLastAction == MotionEvent.ACTION_DOWN) {
             // startAnimation(mAnimation);
+            mObjectAnimator.cancel();
             mObjectAnimator.start();
         }
         mLastAction = event.getAction();

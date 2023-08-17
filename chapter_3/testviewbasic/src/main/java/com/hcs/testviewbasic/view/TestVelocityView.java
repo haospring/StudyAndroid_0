@@ -91,6 +91,10 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
         int startY = getScrollY();
         int deltaX = destX - startX;
         int deltaY = destY - startY;
+        LogUtils.logD(TAG, "startX = " + startX);
+        LogUtils.logD(TAG, "startY = " + startY);
+        LogUtils.logD(TAG, "deltaX = " + deltaX);
+        LogUtils.logD(TAG, "deltaY = " + deltaY);
         mScroller.startScroll(startX, startY, deltaX, deltaY, 1000);
         invalidate();
     }
@@ -143,6 +147,12 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
     public boolean onSingleTapConfirmed(MotionEvent e) {
         mScrollX = (e.getX() >= (float) getWidth() / 2) ? -(int) (e.getX() - getWidth() / 2) : (int) (getWidth() / 2 - e.getX());
         mScrollY = (e.getY() >= (float) getHeight() / 2) ? -(int) (e.getY() - getHeight() / 2) : (int) (getHeight() / 2 - e.getY());
+        LogUtils.logD(TAG, "e.getX() = " + e.getX());
+        LogUtils.logD(TAG, "e.getY() = " + e.getY());
+        LogUtils.logD(TAG, "e.getWidth() = " + getWidth());
+        LogUtils.logD(TAG, "e.getHeight() = " + getHeight());
+        LogUtils.logD(TAG, "mScrollX = " + mScrollX);
+        LogUtils.logD(TAG, "mScrollY = " + mScrollY);
 
         smoothScrollTo(mScrollX, mScrollY);
         return true;

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Test Window</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="control_panel">控制中心</string>
+    <string name="btn_tip">长按空白处拖动</string>
+    <string name="btn_jump">点击跳转到第二页</string>
+</resources>
