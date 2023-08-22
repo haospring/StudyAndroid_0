@@ -51,6 +51,7 @@ public class TestVelocityView extends TextView implements GestureDetector.OnGest
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        getParent().requestDisallowInterceptTouchEvent(true);
         VelocityTracker velocityTracker = VelocityTracker.obtain();
         velocityTracker.addMovement(event);
         velocityTracker.computeCurrentVelocity(100);

@@ -2,6 +2,7 @@ package com.hcs.testviewbasic.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 
 import com.hcs.testviewbasic.R;
 import com.hcs.testviewbasic.databinding.ActivityMainBinding;
@@ -51,6 +53,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LogUtils.logD(TAG, "test button onclick");
             }
         });
+
+        mBinding.tb5.setOnClickListener(this);
+
+        View childAt = ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0);
+        LogUtils.logD(TAG, "childAt = " + childAt);
+        LogUtils.logD(TAG, "mBinding.getRoot() = " + mBinding.getRoot());
     }
 
     @Override
@@ -62,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == mBinding.tvv1.getId()) {
 //            mBinding.tvv1.smoothScrollTo(-350, -350);
+        } else if (v.getId() == mBinding.tb5.getId()) {
+            Intent intent = new Intent(this, SecondActivity.class);
+            startActivity(intent);
         }
     }
 }
