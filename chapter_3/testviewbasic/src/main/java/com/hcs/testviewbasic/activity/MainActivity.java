@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 测试监听view的可见性
         mBinding.tb6.setOnClickListener(this);
 
+        // 测试自定义view
+        mBinding.tb7.setOnClickListener(this);
+
         View childAt = ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0);
         LogUtils.logD(TAG, "childAt = " + childAt);
         LogUtils.logD(TAG, "mBinding.getRoot() = " + mBinding.getRoot());
@@ -126,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 mBinding.tb5.setVisibility(View.VISIBLE);
             }
+        } else if (v.getId() == mBinding.tb7.getId()) {
+            Intent intent = new Intent(this, ThirdActivity.class);
+            startActivity(intent);
         }
     }
 }

@@ -28,7 +28,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             // 每次循环都需要创建一个layout布局对象
             mContentBinding = LayoutContentBinding.inflate(getLayoutInflater(), mBinding.hsvContainer, false);
             mContentBinding.getRoot().getLayoutParams().width = CommonUtils.getScreenWidth(this);

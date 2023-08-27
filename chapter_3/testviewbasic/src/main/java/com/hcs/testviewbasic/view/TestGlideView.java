@@ -35,6 +35,7 @@ public class TestGlideView extends ImageView {
         int y = (int) event.getRawY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                getParent().requestDisallowInterceptTouchEvent(true);
                 break;
             case MotionEvent.ACTION_MOVE:
                 setTranslationX(x - mLastX + getTranslationX());

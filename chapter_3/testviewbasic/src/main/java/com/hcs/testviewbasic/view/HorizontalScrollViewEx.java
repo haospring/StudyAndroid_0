@@ -4,28 +4,29 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.Scroller;
 
 import com.hcs.testviewbasic.utils.LogUtils;
 
-public class HorizontalScrollViewEx extends LinearLayout {
+public class HorizontalScrollViewEx extends ViewGroup {
     private static final String TAG = HorizontalScrollViewEx.class.getSimpleName();
 
-    private final Scroller mScroller;
-    private final VelocityTracker mVelocityTracker;
+    private int mChildSize;
+    private int mChildWidth;
+    private int mChildIndex;
 
     private int mLastX;
     private int mLastY;
     private int mLastXIntercept;
     private int mLastYIntercept;
 
-    private int mChildWidth = getResources().getDisplayMetrics().widthPixels;
-    private int mChildSize = 2;
-    private int mChildIndex = 0;
+    private Scroller mScroller;
+    private VelocityTracker mVelocityTracker;
 
-    private final int mScaledTouchSlop;
+    private int mScaledTouchSlop;
 
     public HorizontalScrollViewEx(Context context) {
         this(context, null);
@@ -41,10 +42,16 @@ public class HorizontalScrollViewEx extends LinearLayout {
 
     public HorizontalScrollViewEx(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        mScaledTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop() * 3;
+        init();
+    }
+
+    private void init() {
+        mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         LogUtils.logD(TAG, "mScaledTouchSlop = " + mScaledTouchSlop);
-        mScroller = new Scroller(getContext());
-        mVelocityTracker = VelocityTracker.obtain();
+        if (mScroller == null) {
+            mScroller = new Scroller(getContext());
+            mVelocityTracker = VelocityTracker.obtain();
+        }
     }
 
     // 外部拦截法
@@ -54,6 +61,7 @@ public class HorizontalScrollViewEx extends LinearLayout {
         boolean intercepted = false;
         int x = (int) ev.getX();
         int y = (int) ev.getY();
+
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!mScroller.isFinished()) {
@@ -81,7 +89,6 @@ public class HorizontalScrollViewEx extends LinearLayout {
         return intercepted;
     }
 
-
 // 内部拦截法
 //    @Override
 //    public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -95,10 +102,10 @@ public class HorizontalScrollViewEx extends LinearLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         LogUtils.logD(TAG, "action = " + event.getAction());
-
         mVelocityTracker.addMovement(event);
         int x = (int) event.getX();
         int y = (int) event.getY();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!mScroller.isFinished()) {
@@ -107,13 +114,12 @@ public class HorizontalScrollViewEx extends LinearLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int deltaX = x - mLastX;
-                if (deltaX > mScaledTouchSlop) {
-                    scrollBy(-deltaX, 0);
-                }
+                int deltaY = y - mLastY;
+                scrollBy(-deltaX, 0);
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mVelocityTracker.computeCurrentVelocity(1000);
+                mVelocityTracker.computeCurrentVelocity(100);
                 int xVelocity = (int) mVelocityTracker.getXVelocity();
                 if (Math.abs(xVelocity) >= 50) {
                     mChildIndex = xVelocity > 0 ? mChildIndex - 1 : mChildIndex + 1;
@@ -133,8 +139,59 @@ public class HorizontalScrollViewEx extends LinearLayout {
         return true;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int measuredWidth;
+        int measuredHeight;
+        final int childCount = getChildCount();
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
+
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        if (childCount == 0) {
+            setMeasuredDimension(0, 0);
+        } else if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+            // 假定所有子View的宽高相同
+            View childView = getChildAt(0);
+            measuredWidth = childView.getMeasuredWidth() * childCount;
+            measuredHeight = childView.getMeasuredHeight();
+            setMeasuredDimension(measuredWidth, measuredHeight);
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            View childView = getChildAt(0);
+            measuredWidth = childView.getMeasuredWidth() * childCount;
+            setMeasuredDimension(measuredWidth, heightSize);
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            View childView = getChildAt(0);
+            measuredWidth = widthSize;
+            measuredHeight = childView.getMeasuredHeight();
+            setMeasuredDimension(measuredWidth, measuredHeight);
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        int childLeft = 0;
+        final int childCount = getChildCount();
+        mChildSize = childCount;
+
+        for (int i = 0; i < childCount; i++) {
+            final View childView = getChildAt(i);
+            if (childView.getVisibility() != View.GONE) {
+                final int childWidth = childView.getMeasuredWidth();
+                mChildWidth = childWidth;
+                childView.layout(childLeft, 0, childLeft + childWidth, childView.getMeasuredHeight());
+                childLeft += childWidth;
+            }
+        }
+
+    }
+
     private void smoothScrollBy(int dx, int dy) {
-        mScroller.startScroll(getScrollX(), 0, dx, dy);
+        mScroller.startScroll(getScrollX(), 0, dx, 0, 500);
         invalidate();
     }
 
@@ -143,6 +200,15 @@ public class HorizontalScrollViewEx extends LinearLayout {
         if (mScroller.computeScrollOffset()) {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             postInvalidate();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mVelocityTracker.recycle();
+        if (!mScroller.isFinished()) {
+            mScroller.abortAnimation();
         }
     }
 }
