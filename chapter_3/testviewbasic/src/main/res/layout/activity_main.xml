@@ -66,8 +66,21 @@
         android:enabled="true"
         android:text="To second activity"
         android:textAllCaps="false"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintEnd_toEndOf="@id/tb_4"
-        app:layout_constraintStart_toStartOf="@id/tb_4"
+        app:layout_constraintEnd_toStartOf="@id/tb_6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_4" />
+
+    <com.hcs.testviewbasic.view.TestButton
+        android:id="@+id/tb_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Test Visibility"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tb_5"
         app:layout_constraintTop_toBottomOf="@id/tb_4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

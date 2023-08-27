@@ -12,6 +12,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.hcs.testviewbasic.R;
 import com.hcs.testviewbasic.databinding.ActivityMainBinding;
@@ -20,6 +21,8 @@ import com.hcs.testviewbasic.utils.LogUtils;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private ActivityMainBinding mBinding;
+    private String mBtn5Text = "0";
+    private int mLastBtn5Visibility = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +59,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mBinding.tb5.setOnClickListener(this);
 
+        // 测试监听view的可见性
+        mBinding.tb6.setOnClickListener(this);
+
         View childAt = ((ViewGroup) getWindow().getDecorView().findViewById(android.R.id.content)).getChildAt(0);
         LogUtils.logD(TAG, "childAt = " + childAt);
         LogUtils.logD(TAG, "mBinding.getRoot() = " + mBinding.getRoot());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ViewTreeObserver viewTreeObserver = mBinding.tb5.getViewTreeObserver();
+        viewTreeObserver.addOnWindowAttachListener(new ViewTreeObserver.OnWindowAttachListener() {
+            @Override
+            public void onWindowAttached() {
+                LogUtils.logD(TAG, "onWindowAttached");
+            }
+
+            @Override
+            public void onWindowDetached() {
+                LogUtils.logD(TAG, "onWindowDetached");
+            }
+        });
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                LogUtils.logD(TAG, "tb5 visibility = " + mBinding.tb5.getVisibility());
+                if (mBinding.tb5.getVisibility() == View.VISIBLE && mLastBtn5Visibility != View.VISIBLE) {
+                    mBinding.tb5.setText(mBtn5Text);
+                    LogUtils.logD(TAG, "btn5Text#2 = " + mBinding.tb5.getText());
+                }
+                mLastBtn5Visibility = mBinding.tb5.getVisibility();
+            }
+        });
+
+        new Thread(() -> {
+            int i = 0;
+            while (i < 100) {
+                mBtn5Text = i + "";
+                i++;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -73,6 +120,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == mBinding.tb5.getId()) {
             Intent intent = new Intent(this, SecondActivity.class);
             startActivity(intent);
+        } else if (v.getId() == mBinding.tb6.getId()) {
+            if (mBinding.tb5.getVisibility() == View.VISIBLE) {
+                mBinding.tb5.setVisibility(View.GONE);
+            } else {
+                mBinding.tb5.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
