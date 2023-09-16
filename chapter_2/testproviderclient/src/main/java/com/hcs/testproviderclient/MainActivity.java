@@ -52,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BookProvider.Book.BOOK_AUTHOR
             };
             String selection = "book_name = ?";
-            String[] selectionArgs = {"《Android 开发艺术探索》"};
+            String[] selectionArgs = {"《Android 进阶之光》"};
             String sortOrder = "id desc";
-            Cursor cursor = mBookResolver.query(BookProvider.Book.BOOK_URI, projection, null, null, sortOrder);
+            Cursor cursor = mBookResolver.query(BookProvider.Book.BOOK_URI, projection, selection, selectionArgs, sortOrder);
             while (cursor.moveToNext()) {
                 Log.d(TAG, "query book: " + cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 Log.d(TAG, "query book: " + cursor.getString(cursor.getColumnIndexOrThrow("book_isbn")));
@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "query book: " + cursor.getDouble(cursor.getColumnIndexOrThrow("book_price")));
                 Log.d(TAG, "query book: " + cursor.getString(cursor.getColumnIndexOrThrow("book_author")));
             }
+            cursor.close();
+            Log.d(TAG, "==================================");
 
             sortOrder = "id asc";
             cursor = mBookResolver.query(BookProvider.User.USER_URI, null, null, null, sortOrder);
@@ -71,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "query user user_gender: " + cursor.getInt(cursor.getColumnIndexOrThrow("user_gender")));
                 Log.d(TAG, "query user user_desc: " + cursor.getString(cursor.getColumnIndexOrThrow("user_desc")));
             }
+            cursor.close();
+            Log.d(TAG, "==================================");
 
             if (currentUri != null) {
                 cursor = mBookResolver.query(currentUri, null, null, null, null);
@@ -88,9 +92,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Log.d(TAG, "query user user_desc: " + cursor.getString(cursor.getColumnIndexOrThrow("user_desc")));
                     }
                 }
+                cursor.close();
             }
-
-            cursor.close();
 
             Log.d(TAG, "book mimeType: " + mBookResolver.getType(BookProvider.Book.BOOK_URI));
             Log.d(TAG, "user mimeType: " + mBookResolver.getType(BookProvider.User.USER_URI));
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ContentValues values = new ContentValues();
             values.put("book_isbn", "978-7-121-34838-9");
             values.put("book_name", "《Android 进阶解密》");
-            values.put("book_price", 99.00);
+            values.put("book_price", 199.00);
             values.put("book_author", "刘望舒");
             String where = "id = ?";
             String[] selectionArgs = {"4"};

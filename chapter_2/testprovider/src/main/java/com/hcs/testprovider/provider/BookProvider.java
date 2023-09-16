@@ -21,7 +21,7 @@ public class BookProvider extends ContentProvider {
     private static final int CODE_USER_DIR = 1;
     private static final int CODE_BOOK_ITEM = 2;
     private static final int CODE_USER_ITEM = 3;
-    private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private SQLiteDatabase mDb;
     private Context mContext;
 

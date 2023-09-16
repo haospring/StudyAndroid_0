@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class DbOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = "haospring DbOpenHelper";
+    private static final String TAG = "DbOpenHelper";
     public static final String BOOK_TABLE_NAME = "book";
     public static final String USER_TABLE_NAME = "user";
 
